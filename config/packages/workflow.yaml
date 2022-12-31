@@ -1,0 +1,35 @@
+framework:
+    workflows:
+        duel_process:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'state'
+            supports:
+                - 'App\Entity\Duel'
+            initial_marking: opened
+            places:
+                - opened
+                - started
+                - suspended
+                - canceled
+                - ended
+            transitions:
+                start:
+                    from: opened
+                    to: started
+                suspend:
+                    from: started
+                    to: suspended
+                end:
+                    from: started
+                    to: ended
+                cancel:
+                    from: started
+                    to: canceled
+                resume:
+                    from: suspended
+                    to: started
+                close:
+                    from: opened
+                    to: canceled

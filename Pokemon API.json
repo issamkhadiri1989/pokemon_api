@@ -1,0 +1,1292 @@
+{
+	"info": {
+		"_postman_id": "645482e1-8289-43d8-97a5-aa8d379b892c",
+		"name": "Pokemon API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Secured endpoints",
+			"item": [
+				{
+					"name": "Match",
+					"item": [
+						{
+							"name": "Rounds",
+							"item": [
+								{
+									"name": "Start new round",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"duel\": \"/api/duels/1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{LOCAL}}/rounds",
+											"host": [
+												"{{LOCAL}}"
+											],
+											"path": [
+												"rounds"
+											]
+										},
+										"description": "# Create a new round\n\nWhen the opponent accepts the challenge, a new round must be created,\n\n**Note**: This endpoint mustbe called when the challenge is accepted by the opponent so that a new round must be created.\n\n> A round must not be created as long as a round is already in progress"
+									},
+									"response": []
+								},
+								{
+									"name": "Get information about a given round",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{LOCAL}}/rounds/1",
+											"host": [
+												"{{LOCAL}}"
+											],
+											"path": [
+												"rounds",
+												"1"
+											]
+										},
+										"description": "This endpoint will show details about a given round. It requires the trainer to be authenticated to consume this data."
+									},
+									"response": []
+								},
+								{
+									"name": "Select a Pokemon during the round",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/merge-patch+json",
+												"type": "default"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"select_pokemon\": \"/api/pokeball/1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{LOCAL}}/rounds/1/select",
+											"host": [
+												"{{LOCAL}}"
+											],
+											"path": [
+												"rounds",
+												"1",
+												"select"
+											]
+										},
+										"description": "The current trainer must chose a Pokemon to use in the round. \n\nThe current trainer must be either the challenger or the opponent."
+									},
+									"response": []
+								},
+								{
+									"name": "Execute an attack",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"round\": \"/api/rounds/1\",\r\n    \"pokemon\": \"/api/pokeball/1\",\r\n    \"move\": \"/api/abilities/24\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{LOCAL}}/attacks",
+											"host": [
+												"{{LOCAL}}"
+											],
+											"path": [
+												"attacks"
+											]
+										},
+										"description": "This endpoint is  used  to perform a move in the given round"
+									},
+									"response": []
+								}
+							],
+							"description": "This collection will hold every endpoint related to rounds"
+						},
+						{
+							"name": "Open a challenge to a duel",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"opponent\": \"/api/trainer/2\",\r\n    \"nbPokemonAllowed\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCAL}}/duels",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"duels"
+									]
+								},
+								"description": "# Challenge an opponent\n\nThe connected trainer can invite another trainer, opponent, to a challenge\n\n**Deprecated**: the first round must be opened once the challenge is accepted. No need to have an endpoint for this right ?"
+							},
+							"response": []
+						},
+						{
+							"name": "Display a specific match's details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"/*pm.test('get.duels.details', function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});*/"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LOCAL}}/duels/1",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"duels",
+										"1"
+									]
+								},
+								"description": "# Details of a given duel\n\nThis endpoint is destinated to a given trainer who is playning a match.\n\nThe trainer must choose a Pokemon to start the game"
+							},
+							"response": []
+						},
+						{
+							"name": "Accept the challenge",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/merge-patch+json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCAL}}/duel/1/accept",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"duel",
+										"1",
+										"accept"
+									]
+								},
+								"description": "# Accept the duel\n\nThe opponent will be able to accept the the challenge and start the game"
+							},
+							"response": []
+						},
+						{
+							"name": "Cancel a match",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/merge-patch+json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{LOCAL}}/duel/2/close",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"duel",
+										"2",
+										"close"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "This collection contains all endpoints that handle the match process."
+				},
+				{
+					"name": "Trainer's profile",
+					"item": [
+						{
+							"name": "Bag and Pokeballs",
+							"item": [
+								{
+									"name": "Create new Bag for a given trainer",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Conten",
+												"value": "*",
+												"type": "default"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{LOCAL}}/bag/create",
+											"host": [
+												"{{LOCAL}}"
+											],
+											"path": [
+												"bag",
+												"create"
+											]
+										},
+										"description": "# Create new Bag\n\nThis url should be used by a trainer. This trainer must be logged in before using this route.\n\nThis endpoint creates a new bag to hold pokemon into BagItem (pokeballs)"
+									},
+									"response": []
+								},
+								{
+									"name": "Catch a new pokemon",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"bag\": \"/api/bags/2\",\r\n    \"pokemon\": \"/api/pokemon/1\",\r\n    \"level\": 15\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{LOCAL}}/catch",
+											"host": [
+												"{{LOCAL}}"
+											],
+											"path": [
+												"catch"
+											]
+										},
+										"description": "# New Pokémon, Catch it !\n\nThis URL should not be exposed before authentication of the trainer as it gives access to a bag and catches a pokemon. Then, put it in the bag."
+									},
+									"response": []
+								},
+								{
+									"name": "Visualize the content of a Pokeball",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{LOCAL}}/pokeball/1",
+											"host": [
+												"{{LOCAL}}"
+											],
+											"path": [
+												"pokeball",
+												"1"
+											]
+										},
+										"description": "the endpoint aims to  show which pokemon held in that given pokeball.\n\nthis endpoint is not accessible publically. and it is only available to  the trainer who owns the pokeball"
+									},
+									"response": []
+								},
+								{
+									"name": "Display all bags",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{LOCAL}}/bags",
+											"host": [
+												"{{LOCAL}}"
+											],
+											"path": [
+												"bags"
+											]
+										},
+										"description": "Shows details about the connected trainer's bags"
+									},
+									"response": []
+								}
+							],
+							"description": "This collection holds all what is related to a Bag and Pokeballs"
+						},
+						{
+							"name": "Change password",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"content-type": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"currentPassword\": \"000000\",\r\n    \"newPassword\": \"000000\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCAL}}/passwords",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"passwords"
+									]
+								},
+								"description": "# Change Password\n\nThis endpoint aims to change the current trainer's password.\n\n> This WS is not developped yet"
+							},
+							"response": []
+						},
+						{
+							"name": "Trainer's private profile",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LOCAL}}/profile",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"profile"
+									]
+								},
+								"description": "# User's profile\n\nDisplays the private trainer's profile"
+							},
+							"response": []
+						},
+						{
+							"name": "Update trainer's profile",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HOST}}/trainer",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"trainer"
+									]
+								},
+								"description": "# Profile management\n\nThis endpoint allows a connected trainer to change his profile details like his first name or last name\n\n> This WS is not developped yet"
+							},
+							"response": []
+						}
+					],
+					"description": "This collection holds all endpoints related to the connected trainer."
+				},
+				{
+					"name": "Update a Pokemon partially",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"picture\": \"https://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL}}/pokemon/1",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"pokemon",
+								"1"
+							]
+						},
+						"description": "# Update Pokémon\n\nThis url should be protected and available only for admin users.\n\n**deprecated**: This endpoint is useless as we will never update partailly the catalog by an URL. This  was just an example"
+					},
+					"response": []
+				},
+				{
+					"name": "Connect",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var token = pm.response.json();\r",
+									"pm.environment.set('TOKEN', token.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"misty\",\r\n    \"password\": \"000000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL}}/login_check",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"login_check"
+							]
+						},
+						"description": "# login\n\nThis endpoint is used for login"
+					},
+					"response": [
+						{
+							"name": "Connect with Misty",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"misty\",\r\n    \"password\": \"000000\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCAL}}/login_check",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"login_check"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Connect with Ash",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"ash\",\r\n    \"password\": \"000000\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCAL}}/login_check",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"login_check"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Connect with Brock",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"brock\",\r\n    \"password\": \"000000\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCAL}}/login_check",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"login_check"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Evolve a specific Pokemon in a Pokeball",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/merge-patch+json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL}}/evolve/10",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"evolve",
+								"10"
+							]
+						},
+						"description": "# Evolving the Pokémon\n\nThis endpoint checks and evolves a Pokémon inside a desired Pokéball. \n\n**Deprecated**: This endpoint will not be used because evolving will be handled internally"
+					},
+					"response": []
+				},
+				{
+					"name": "Increase level to a given Pokemon",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/merge-patch+json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL}}/levelup/1",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"levelup",
+								"1"
+							]
+						},
+						"description": "# Increase a Pokémon's level\n\nThis endpoint increases a Pokémon's level. It's secured.\n\n**Deprecated**: This endpoint is not actually used. The level of the Pokémon increases depending on how much matches it wins."
+					},
+					"response": [
+						{
+							"name": "Increase Ash's pokemon Ivysor",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/merge-patch+json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCAL}}/levelup/1",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"levelup",
+										"1"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Gets a random pokemon to be catched",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"description": "This endpoint return a Pokemon to be catched by  the trainer.\n\nIt is not accessible for public"
+					},
+					"response": []
+				}
+			],
+			"description": "This collection hosts the secured entrypoints"
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Find a category by its id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}/categories/1",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"categories",
+								"1"
+							]
+						},
+						"description": "# Shows the category by its ID \n\nThis is a public endpoint which can be used to fetch details about a given category : name, id and pokemons' main type"
+					},
+					"response": [
+						{
+							"name": "Find a category by its id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LOCAL}}/categories/6",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"categories",
+										"6"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Finds a catagory with a given name",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LOCAL}}/categories/?name=Grass",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"path": [
+										"categories",
+										""
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Grass"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Catalog of all categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}/categories?page=2",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"categories"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						},
+						"description": "# Categories\n\nDisplays all the existing categories."
+					},
+					"response": []
+				}
+			],
+			"description": "# Categories\n\nThis collections hosts every entrypoint related to Pokemon's types"
+		},
+		{
+			"name": "Catalog of Pokemon",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{LOCAL}}/pokemon",
+					"host": [
+						"{{LOCAL}}"
+					],
+					"path": [
+						"pokemon"
+					]
+				},
+				"description": "# The Pokédex\n\nBrowse all pokemon catalog"
+			},
+			"response": [
+				{
+					"name": "Catalog of Pokemon with pagination",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}/pokemon?page=3",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"pokemon"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "Catalog of Pokemon with search by code",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}/pokemon?code=011",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"pokemon"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "011"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Get specific pokemon by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{LOCAL}}/pokemon/1",
+					"host": [
+						"{{LOCAL}}"
+					],
+					"path": [
+						"pokemon",
+						"1"
+					]
+				},
+				"description": "# Show a single Pokémon\n\nGet info of a given Pokemon by its ID"
+			},
+			"response": [
+				{
+					"name": "Get specific pokemon by id",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}/pokemon/1",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"pokemon",
+								"1"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "Get specific pokemon by id",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}/pokemon/3",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"pokemon",
+								"3"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Get all trainers",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{LOCAL}}/trainers",
+					"host": [
+						"{{LOCAL}}"
+					],
+					"path": [
+						"trainers"
+					]
+				},
+				"description": "# List of trainers\n\nListing all available trainers"
+			},
+			"response": []
+		},
+		{
+			"name": "Get pokemon by a given category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{LOCAL}}/category/3/pokemon",
+					"host": [
+						"{{LOCAL}}"
+					],
+					"path": [
+						"category",
+						"3",
+						"pokemon"
+					]
+				},
+				"description": "# Catalog of Pokémon of a category\n\nSelect all pokemon  where their main type is equal to the given category"
+			},
+			"response": []
+		},
+		{
+			"name": "Display the public profile of the trainer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{LOCAL}}/trainer/3",
+					"host": [
+						"{{LOCAL}}"
+					],
+					"path": [
+						"trainer",
+						"3"
+					]
+				},
+				"description": "# Public trainer's profile\n\nDisplays the public profile of the given trainer"
+			},
+			"response": []
+		},
+		{
+			"name": "Show all matches of a trainer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{LOCAL}}/trainers/1/matches",
+					"host": [
+						"{{LOCAL}}"
+					],
+					"path": [
+						"trainers",
+						"1",
+						"matches"
+					]
+				},
+				"description": "# Matches of a single trainer\n\nThis endpoint shows all matches of a given trainer. It shows the trainer, his opponent, rounds and the state of the match."
+			},
+			"response": []
+		},
+		{
+			"name": "Register a new Trainer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"tracy\",\r\n    \"password\": \"123Ab!\",\r\n    \"firstName\": \"Tracy\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{LOCAL}}/register",
+					"host": [
+						"{{LOCAL}}"
+					],
+					"path": [
+						"register"
+					]
+				},
+				"description": "# New trainer\n\nWith this endpoint, a new trainer can register and have access to every secured endpoints"
+			},
+			"response": []
+		},
+		{
+			"name": "Get list of  matches",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{LOCAL}}/duels",
+					"host": [
+						"{{LOCAL}}"
+					],
+					"path": [
+						"duels"
+					]
+				},
+				"description": "# All matches\n\nThis endpoint displays all the matches with their status. It's public and visible for every trainer"
+			},
+			"response": []
+		}
+	]
+}

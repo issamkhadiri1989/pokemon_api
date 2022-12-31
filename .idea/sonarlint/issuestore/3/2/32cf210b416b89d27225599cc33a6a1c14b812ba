@@ -1,0 +1,4 @@
+
+k	php:S1192%"JDefine a constant instead of duplicating this literal "duel:read" 4 times.(³ñÄÂøÿÿÿÿ8Ì¦¹ÄÖ0
+R	php:S1172ˆ"0Remove the unused function parameter "$context".(›’éŠùÿÿÿÿ8Ò¦¹ÄÖ0
+L	php:S1066½"/Merge this if statement with the enclosing one.(úì»è8Û¦¹ÄÖ0

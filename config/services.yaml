@@ -1,0 +1,29 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $source: '%kernel.project_dir%/data'
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Enum/'
+            - '../src/Model'
+            - '../src/Kernel.php'
+            - '../src/ApiResource/Model'
+
+    App\Processor\UserPasswordHasher:
+        bind:
+            $processor: '@api_platform.doctrine.orm.state.persist_processor'
+
+    App\Event\DuelListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.view', priority: !php/const ApiPlatform\Symfony\EventListener\EventPriorities::PRE_WRITE, method: 'completeDuelProperties' }
+
+    App\Processor\DuelPokemonSelector:
+        bind:
+            $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
